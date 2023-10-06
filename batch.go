@@ -4,6 +4,7 @@ package batch103
 
 import (
 	"log"
+	"os"
 	"reflect"
 )
 
@@ -25,13 +26,16 @@ func (j *JobLauncher) Run(r ReaderType, p []ProcessorType, w []WriterType) {
 	r.SetParameters(j.ParameterData)
 	// Reader Execution
 	log.Println("==== Reader : ", reflect.TypeOf(r), " Start ====")
-	var result = r.Read()
+	var result, readErr = r.Read()
 	log.Println("==== Reader : ", reflect.TypeOf(r), " End ====")
+	if readErr != nil {
+		os.Exit(1)
+	}
 
 	var chunkProcessing bool
 	var totalRecords = 0
 
-	if (j.chunkSize != 0 && len(result) != 0){
+	if j.chunkSize != 0 && len(result) != 0 {
 		chunkProcessing = true
 		totalRecords = len(result)
 	}
