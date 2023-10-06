@@ -84,7 +84,6 @@ func (f *FileReader) OpenCSVFile() (csv.Reader, error) {
 
 	if err != nil {
 		log.Fatalln("Couldn't open csv file", err)
-		return nil, err
 	}
 
 	return *csvReader, err
