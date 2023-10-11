@@ -27,7 +27,6 @@ type FileReader struct {
 }
 
 // Method under Base Reader
-// Method under Base Reader
 func (b *BaseReader) SetParameters(values map[string]string) {
 	b.parameters = values
 }
@@ -37,7 +36,6 @@ func (b BaseReader) Parameters() map[string]string {
 	return b.parameters
 }
 
-// Method under File Reader
 // Method under File Reader
 func (f *FileReader) SetFileName(value string) {
 	f.filename = value

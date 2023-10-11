@@ -27,10 +27,11 @@ func (j *JobLauncher) Run(r ReaderType, p []ProcessorType, w []WriterType) {
 	// Reader Execution
 	log.Println("==== Reader : ", reflect.TypeOf(r), " Start ====")
 	var result, readErr = r.Read()
-	log.Println("==== Reader : ", reflect.TypeOf(r), " End ====")
 	if readErr != nil {
+		log.Println(readErr)
 		os.Exit(1)
 	}
+	log.Println("==== Reader : ", reflect.TypeOf(r), " End ====")
 
 	var chunkProcessing bool
 	var totalRecords = 0
