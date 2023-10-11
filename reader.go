@@ -9,11 +9,6 @@ import (
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
-
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/s3"
-	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 )
 
 type ReaderType interface {
@@ -68,7 +63,6 @@ func downloadFileFromS3(downloader *s3manager.Downloader, bucketName string, fil
 }
 
 func (f *FileReader) DownloadFileFromS3Bucket(region string, bucket string) error {
-func (f *FileReader) DownloadFileFromS3Bucket(region string, bucket string) error {
 	sess, err := session.NewSessionWithOptions(session.Options{
 		Profile: "default",
 		Config: aws.Config{
@@ -83,21 +77,17 @@ func (f *FileReader) DownloadFileFromS3Bucket(region string, bucket string) erro
 	downloader := s3manager.NewDownloader(sess)
 	err = downloadFileFromS3(downloader, bucketName, fileName)
 	return err
-	err = downloadFileFromS3(downloader, bucketName, fileName)
-	return err
+
 }
 
 func (f *FileReader) OpenCSVFile() (csv.Reader, error) {
-func (f *FileReader) OpenCSVFile() (csv.Reader, error) {
 
 	csvFile, err := os.Open(f.filename)
-	csvReader := csv.NewReader(csvFile)
 	csvReader := csv.NewReader(csvFile)
 
 	if err != nil {
 		log.Fatalln("Couldn't open csv file", err)
 	}
 
-	return *csvReader, err
 	return *csvReader, err
 }
