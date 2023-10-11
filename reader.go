@@ -75,6 +75,8 @@ func (f *FileReader) DownloadFileFromS3Bucket(region string, bucket string) erro
 	downloader := s3manager.NewDownloader(sess)
 	err = downloadFileFromS3(downloader, bucketName, fileName)
 	return err
+	err = downloadFileFromS3(downloader, bucketName, fileName)
+	return err
 }
 
 func (f *FileReader) OpenCSVFile() (csv.Reader, error) {
