@@ -12,7 +12,7 @@ import (
 )
 
 type ReaderType interface {
-	Read() []BatchData, error
+	Read() ([]BatchData, error)
 	SetParameters(values map[string]string)
 }
 
@@ -27,6 +27,7 @@ type FileReader struct {
 }
 
 // Method under Base Reader
+// Method under Base Reader
 func (b *BaseReader) SetParameters(values map[string]string) {
 	b.parameters = values
 }
@@ -36,6 +37,7 @@ func (b BaseReader) Parameters() map[string]string {
 	return b.parameters
 }
 
+// Method under File Reader
 // Method under File Reader
 func (f *FileReader) SetFileName(value string) {
 	f.filename = value
@@ -75,8 +77,7 @@ func (f *FileReader) DownloadFileFromS3Bucket(region string, bucket string) erro
 	downloader := s3manager.NewDownloader(sess)
 	err = downloadFileFromS3(downloader, bucketName, fileName)
 	return err
-	err = downloadFileFromS3(downloader, bucketName, fileName)
-	return err
+
 }
 
 func (f *FileReader) OpenCSVFile() (csv.Reader, error) {
