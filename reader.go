@@ -12,7 +12,7 @@ import (
 )
 
 type ReaderType interface {
-	Read() []BatchData, error
+	Read() ([]BatchData, error)
 	SetParameters(values map[string]string)
 }
 
