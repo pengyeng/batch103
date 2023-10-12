@@ -4,11 +4,6 @@ import (
 	"encoding/csv"
 	"log"
 	"os"
-
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/s3"
-	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 )
 
 type ReaderType interface {
@@ -41,41 +36,8 @@ func (f *FileReader) SetFileName(value string) {
 	f.filename = value
 }
 
-func downloadFileFromS3(downloader *s3manager.Downloader, bucketName string, fileName string) error {
-	file, err := os.Create(fileName)
-	if err != nil {
-		return err
-	}
-
-	defer file.Close()
-
-	_, err = downloader.Download(
-		file,
-		&s3.GetObjectInput{
-			Bucket: aws.String(bucketName),
-			Key:    aws.String(fileName),
-		},
-	)
-
-	return err
-}
-
-func (f *FileReader) DownloadFileFromS3Bucket(region string, bucket string) error {
-	sess, err := session.NewSessionWithOptions(session.Options{
-		Profile: "default",
-		Config: aws.Config{
-			Region: aws.String(region),
-		},
-	})
-	if err != nil {
-		return err
-	}
-	fileName := f.filename
-	bucketName := bucket
-	downloader := s3manager.NewDownloader(sess)
-	err = downloadFileFromS3(downloader, bucketName, fileName)
-	return err
-
+func (f *FileReader) GetFileName() string {
+	return f.filename
 }
 
 func (f *FileReader) OpenCSVFile() (csv.Reader, error) {
