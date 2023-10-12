@@ -1,7 +1,7 @@
 package batch103
 
 type ProcessorType interface {
-	Process(data []BatchData) []BatchData
+	Process(data []BatchData) ([]BatchData, error)
 	SetParameters(values map[string]string)
 }
 
