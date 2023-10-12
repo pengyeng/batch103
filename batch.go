@@ -94,7 +94,12 @@ func (j *JobLauncher) Run(r ReaderType, p []ProcessorType, w []WriterType) {
 		for i := 0; i < len(p); i++ {
 			p[i].SetParameters(j.ParameterData)
 			log.Println("==== Processor : ", reflect.TypeOf(p[i]), " Start ====")
-			result = p[i].Process(result)
+			var processErr error
+			result, processErr = p[i].Process(result)
+			if processErr != nil {
+				log.Println(processErr)
+				os.Exit(1)
+			}
 			log.Println("==== Processor : ", reflect.TypeOf(p[i]), " End ====")
 
 		}
