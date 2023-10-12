@@ -3,7 +3,7 @@ package batch103
 import "database/sql"
 
 type WriterType interface {
-	Write(data []BatchData)
+	Write(data []BatchData) error
 	SetParameters(values map[string]string)
 }
 
