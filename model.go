@@ -1,4 +1,4 @@
-package batch103
+package main
 
 const (
 	StgRead    = "READ"

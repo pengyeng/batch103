@@ -1,4 +1,4 @@
-package batch103
+package main
 
 type ProcessorType interface {
 	Process(data []BatchData) ([]BatchData, error)
