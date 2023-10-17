@@ -1,6 +1,6 @@
 // This is the skeleton of the Batch Framework
 
-package main
+package batch103
 
 import (
 	"log"
