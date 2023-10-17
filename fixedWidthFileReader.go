@@ -1,4 +1,4 @@
-package main
+package batch103
 
 import (
 	"encoding/json"
@@ -9,6 +9,7 @@ import (
 
 type FixedWidthFileReader struct {
 	FileReader
+	Configuration string
 }
 
 type Fields struct {
@@ -21,16 +22,15 @@ type Field struct {
 	End   int `json:"End"`
 }
 
-func (r *FixedWidthFileReader) Read(fileName string) ([]BatchData, error) {
+func (r *FixedWidthFileReader) Read() ([]BatchData, error) {
 
 	var result []BatchData
 	var myFileUtils = &FileUtils{}
-	r.FileReader.SetFileName(fileName)
-	var fileContent, err = myFileUtils.OpenFixedWidthFile(fileName)
+	var fileContent, err = myFileUtils.OpenFixedWidthFile(r.FileReader.GetFileName())
 	if err != nil {
 		return result, err
 	}
-	var jsonFile, jsonErr = os.Open("config.json")
+	var jsonFile, jsonErr = os.Open(r.Configuration)
 	if jsonErr != nil {
 		return result, jsonErr
 	}
@@ -51,7 +51,6 @@ func (r *FixedWidthFileReader) Read(fileName string) ([]BatchData, error) {
 
 	for {
 		n, err := fileContent.Read(buf)
-		log.Println(n)
 		if err == io.EOF {
 			break
 		}
@@ -59,10 +58,13 @@ func (r *FixedWidthFileReader) Read(fileName string) ([]BatchData, error) {
 			log.Println(err)
 			continue
 		}
+		log.Println("Printing n ", n)
 		if n > 0 {
 			var rowData []string
 			var readLine = string(buf[:n])
+			log.Println(readLine)
 			for i := 0; i < len(fields.Fields); i++ {
+				log.Println("retrieving ", readLine[fields.Fields[i].Begin:fields.Fields[i].End])
 				rowData = append(rowData, readLine[fields.Fields[i].Begin:fields.Fields[i].End])
 			}
 			batchData = batchData.Create(rowData)
