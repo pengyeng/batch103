@@ -22,10 +22,33 @@ type Field struct {
 	End   int `json:"End"`
 }
 
+type InputError struct{}
+
+func (m *InputError) Error() string {
+	return "Input File not specified"
+}
+
+type ConfigError struct{}
+
+func (m *ConfigError) Error() string {
+	return "Configuration File not specified"
+}
+
 func (r *FixedWidthFileReader) Read() ([]BatchData, error) {
 
 	var result []BatchData
 	var myFileUtils = &FileUtils{}
+
+	// Checking Input File and Configuration File
+	if r.FileReader.GetFileName() == "" {
+		var inputError = &InputError{}
+		return result, inputError
+	}
+	if r.Configuration == "" {
+		var configError = &ConfigError{}
+		return result, configError
+	}
+
 	var fileContent, err = myFileUtils.OpenFixedWidthFile(r.FileReader.GetFileName())
 	if err != nil {
 		return result, err
@@ -58,13 +81,10 @@ func (r *FixedWidthFileReader) Read() ([]BatchData, error) {
 			log.Println(err)
 			continue
 		}
-		log.Println("Printing n ", n)
 		if n > 0 {
 			var rowData []string
 			var readLine = string(buf[:n])
-			log.Println(readLine)
 			for i := 0; i < len(fields.Fields); i++ {
-				log.Println("retrieving ", readLine[fields.Fields[i].Begin:fields.Fields[i].End])
 				rowData = append(rowData, readLine[fields.Fields[i].Begin:fields.Fields[i].End])
 			}
 			batchData = batchData.Create(rowData)
